@@ -4,10 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using E_Players_AspNetCore.Models;
+using Eplayes_AspCore.Models;
 
-namespace E_Players_AspNetCore.Controllers
+namespace Eplayes_AspCore.Controllers
 {
     public class HomeController : Controller
     {
@@ -20,6 +21,9 @@ namespace E_Players_AspNetCore.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.UserName = HttpContext.Session.GetString("_UserName");
+            Noticia noticiaModel = new Noticia();
+            ViewBag.Noticias = noticiaModel.ReadAll(); 
             return View();
         }
 
@@ -28,6 +32,5 @@ namespace E_Players_AspNetCore.Controllers
             return View();
         }
 
-        
     }
 }

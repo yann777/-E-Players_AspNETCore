@@ -1,60 +1,42 @@
-using System.Collections.Generic;
+using Eplayes_AspCore.Interfaces;
 using System.IO;
-using E_Players_AspNetCore.iterfaces;
+using System.Collections.Generic;
+using Eplayes_AspCore.Controllers;
 
-namespace E_Players_AspNetCore.Models
+namespace Eplayes_AspCore.Models
 {
-    public class Jogador : Eplayersbase , IJogador
+    public class Jogador : EplayersBase , IJogador
     {
-        public Jogador(int idJogador, string nome, int idEquipe, string email, string senha)
-        {
-            this.IdJogador = idJogador;
-            this.Nome = nome;
-            this.IdEquipe = idEquipe;
-            this.Email = email;
-            this.Senha = senha;
-
-        }
         public int IdJogador { get; set; }
 
         public string Nome { get; set; }
 
+        public string Email { get; set; }
+
+        public string Senha { get; set;}
+
         public int IdEquipe { get; set; }
 
-        // Login
-        public string Email { get; set; }
-        public string Senha { get; set; }
+        private string PATH = "Database/Jogador.csv";
 
-         private const string PATH = "Database/Jogador.csv";
+         public Jogador()
+        {
+            CreateFolderAndFile(PATH);
+        }
 
-    public Jogador()
-    {
-        CreateFolderAndFile(PATH);
-    }
-     /// <summary>
-        /// Adiciona uma Jogador ao CSV
-        /// </summary>
-        /// <param name="j">Jogador</param>
+    
         public void Create(Jogador j)
         {
             string[] linha = { PrepararLinha(j) };
             File.AppendAllLines(PATH, linha);
         }
 
-        /// <summary>
-        /// Prepara a linha para a estrutura do objeto Jogador
-        /// </summary>
-        /// <param name="e">Objeto "Jogador"</param>
-        /// <returns>Retorna a linha em formato de .csv</returns>
         private string PrepararLinha(Jogador j)
         {
-            return $"{j.IdJogador};{j.Nome};{j.Email};{j.Senha}";
+            return $"{j.IdJogador};{j.Nome};{j.Email};{j.Senha};{j.IdEquipe}";
         }
 
-        /// <summary>
-        /// Exclui uma Jogador
-        /// </summary>
-        /// <param name="idJogador"></param>
+
         public void Delete(int idJogador)
         {
             List<string> linhas = ReadAllLinesCSV(PATH);
@@ -63,10 +45,7 @@ namespace E_Players_AspNetCore.Models
             RewriteCSV(PATH, linhas);
         }
 
-        /// <summary>
-        /// Lê todos as linhas do csv
-        /// </summary>
-        /// <returns>Lista de Jogadors</returns>
+        
         public List<Jogador> ReadAll()
         {
             List<Jogador> jogadores = new List<Jogador>();
@@ -81,16 +60,14 @@ namespace E_Players_AspNetCore.Models
                 jogador.Nome = linha[1];
                 jogador.Email = linha[2];
                 jogador.Senha = linha[3];
+                jogador.IdEquipe = int.Parse(linha[4]);
 
                 jogadores.Add(jogador);
             }
             return jogadores;
         }
 
-        /// <summary>
-        /// Altera uma Jogador
-        /// </summary>
-        /// <param name="j">Jogador alterada</param>
+       
         public void Update(Jogador j)
         {
             List<string> linhas = ReadAllLinesCSV(PATH);
@@ -98,5 +75,8 @@ namespace E_Players_AspNetCore.Models
             linhas.Add( PrepararLinha(j) );                        
             RewriteCSV(PATH, linhas); 
         }
+
+        
+
     }
 }

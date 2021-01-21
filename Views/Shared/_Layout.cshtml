@@ -3,15 +3,13 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - E_Players_AspNetCore</title>
-    <!-- Novo CSS e JS -->
     <link href="https://fonts.googleapis.com/css?family=Titillium+Web:400,700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/2faae0d38b.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="~/css/style.css"/>
-
+    <title>@ViewData["Title"] - Eplayes_AspCore</title>
+    <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
-    <header>
+   <header>
         <div class="container cabecalho">
             <div>
 
@@ -20,25 +18,30 @@
                 </a>
 
                 <a asp-area="" asp-controller="Home" asp-action="Index">
-                <img src="~/Images/Logo.svg" alt="Logo do site E-Players">
-            </a>
+                    <img src="Images/Logo.svg" alt="Logo do site E-Players">
+                </a>
             </div>
             <nav id="menu">
                 <ul>
                     <li><a asp-area="" asp-controller="Home" asp-action="Index" title="voltar para a página inicial">INÍCIO</a></li>
                     <li><a href="#horarios" title="Ir até a sessão de horários das partidas">HORÁRIOS</a></li>
                     <li><a href="#resultados" title="Ir até a sessão de resultados das partidas">RESULTADOS</a></li>
-                    <li><a href="#noticias" title="Ir até a sessão de notícias">NOTÍCIAS</a></li>
+                    @if(ViewBag.UserName != null)
+                        {
+                            <li><a asp-controller="Noticia"  asp-action="CadastrarNoticia" title="Ir até a sessão de notícias">NOTÍCIAS</a></li>
+                            <li  class="nome-usuario" style="color: #d5379b">Olá @ViewBag.UserName!</li>
+                            <li><a asp-controller="Login" asp-action="Logout" title="voltar para a página inicial">SAIR</a></li>
+                        }else{
+                            <li><a asp-controller="Login" asp-action="Index" title="voltar para a página inicial">ENTRAR</a></li>
+                        }
                     <li><a href="#" title="buscar conteudo no site"><i class="fas fa-search"></i></a></li>
                 </ul>
             </nav>
         </div>
     </header>
-    <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
-    </div>
 
     <footer>
         <div class="container">
@@ -56,7 +59,7 @@
                 </nav>
             </div>
             <div class="mob_logo_sociais">
-                <img src="~/Images/Logo.svg" alt="Logo do projeto E-Players">
+                <img src="Images/Logo.svg" alt="Logo do projeto E-Players">
                 <div class="sociais">
                     <i class="fab fa-facebook-square"></i>
                     <i class="fab fa-instagram-square"></i>
@@ -64,20 +67,20 @@
                     <i class="fab fa-youtube-square"></i>
                 </div>
             </div>
-        <div> 
-            <h5>PRINCIPAIS LIGAS</h5>
-            <h6>LIGA CBL</h6>
-            <h6>LIGA LCK</h6>
-            <h6>LIGA PROFISSIONAL</h6>
-            <h6>LIGA WCG</h6>
+            <div>
+                <h5>PRINCIPAIS LIGAS</h5>
+                <h6>LIGA CBL</h6>
+                <h6>LIGA LCK</h6>
+                <h6>LIGA PROFISSIONAL</h6>
+                <h6>LIGA WCG</h6>
+            </div>
         </div>
-    </div>
-        <p>© Copyrigth 2077 - Todos os direitos reservados ao sena-code</p>
+        <p>© copyright 2021 - Todos os direitos reservados</p>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @RenderSection("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

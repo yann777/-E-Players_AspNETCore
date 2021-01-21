@@ -1,39 +1,54 @@
-using System.Collections.Generic;
 using System.IO;
+using System.Collections.Generic;
 
-namespace E_Players_AspNetCore.Models
+namespace Eplayes_AspCore.Models
 {
-    public class Eplayersbase
+    public class EplayersBase
     {
-        public void CreateFolderAndFile(string _path){
+        public void CreateFolderAndFile(string _path)
+        {
             string folder = _path.Split("/")[0];
-            string file = _path.Split("/")[1];
 
-            if(!Directory.Exists(folder)){
-                Directory.CreateDirectory(folder);
+            if(!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);    
             }
 
-            if(!File.Exists(_path)){
+            if(!File.Exists(_path))
+            {
                 File.Create(_path);
             }
+
         }
 
-        public List<string> ReadAllLinesCSV(string path){
-            
+        public List<string> ReadAllLinesCSV(string path)
+        {
             List<string> linhas = new List<string>();
 
-            using(StreamReader file = new StreamReader(path)){
+
+            //using -> responsável para abrir e fechar o arquivo automaticamente.
+            //StreamReader -> Ler o arquivo por completo.
+            using(StreamReader file = new StreamReader(path))
+            {
                 string linha;
 
-                while((linha = file.ReadLine()) !=null){
+                //Percorre as linhas com um laço de repetição
+                while( (linha = file.ReadLine()) != null)
+                {
                     linhas.Add(linha);
                 }
+
             }
+
             return linhas;
         }
 
-        public void RewriteCSV(string path, List<string> linhas){
-            using(StreamWriter output = new StreamWriter (path)){
+        public void RewriteCSV(string path, List<string> linhas)
+        {
+            //StreamWriter -> Escrever dados no arquivo.
+
+            using(StreamWriter output = new StreamWriter(path))
+            {
                 foreach (var item in linhas)
                 {
                     output.Write(item + '\n');

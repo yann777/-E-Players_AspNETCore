@@ -1,70 +1,75 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
-using E_Players_AspNetCore.iterfaces;
+using Eplayes_AspCore.Interfaces;
 
-namespace E_Players_AspNetCore.Models
+namespace Eplayes_AspCore.Models
 {
-    public class Equipe : Eplayersbase , IEquipe
+    public class Equipe : EplayersBase , IEquipe
     {
         public int IdEquipe { get; set; }
-
         public string Nome { get; set; }
-
         public string Imagem { get; set; }
 
-        private const string PATH = "Database/Equipe.csv";
+        private const string PATH = "Database/equipe.csv";
 
-        public Equipe(){
+   
+        public Equipe()
+        {
             CreateFolderAndFile(PATH);
         }
 
-        public string Prepare(Equipe e){
+       
+        public void Create(Equipe e)
+        {
+            string[] linha = { PrepararLinha(e) };
+            File.AppendAllLines(PATH, linha);
+        }
+
+       
+        private string PrepararLinha(Equipe e)
+        {
             return $"{e.IdEquipe};{e.Nome};{e.Imagem}";
         }
 
-        public void Create(Equipe e)
-        {
-            string[] linhas = {Prepare(e)};
-            File.AppendAllLines(PATH, linhas);
-        }
-
-        public void Delete(int id)
+        public void Delete(int IdEquipe)
         {
             List<string> linhas = ReadAllLinesCSV(PATH);
-
-            linhas.RemoveAll(x => x.Split(";")[0] == id.ToString());
-            
-            RewriteCSV(PATH, linhas); 
+            // 1;FLA;fla.png
+            linhas.RemoveAll(x => x.Split(";")[0] == IdEquipe.ToString());                        
+            RewriteCSV(PATH, linhas);
         }
 
+        
         public List<Equipe> ReadAll()
         {
             List<Equipe> equipes = new List<Equipe>();
-
             string[] linhas = File.ReadAllLines(PATH);
 
-            foreach (string item in linhas){
+            foreach (var item in linhas)
+            {
                 string[] linha = item.Split(";");
 
-                Equipe novaEquipe = new Equipe();
-                novaEquipe.IdEquipe = int.Parse(linha[0]);
-                novaEquipe.Nome = linha[1];
-                novaEquipe.Imagem = linha[2];
+                Equipe equipe = new Equipe();
+                equipe.IdEquipe = Int32.Parse(linha[0]);
+                equipe.Nome = linha[1];
+                equipe.Imagem = linha[2];
 
-                equipes.Add(novaEquipe);    
+                equipes.Add(equipe);
             }
-
             return equipes;
         }
 
+        /// <summary>
+        /// Altera uma Equipe
+        /// </summary>
+        /// <param name="e">Equipe alterada</param>
         public void Update(Equipe e)
         {
             List<string> linhas = ReadAllLinesCSV(PATH);
-
             linhas.RemoveAll(x => x.Split(";")[0] == e.IdEquipe.ToString());
-            linhas.Add(Prepare(e));
-
-            RewriteCSV(PATH, linhas);
+            linhas.Add( PrepararLinha(e) );                        
+            RewriteCSV(PATH, linhas); 
         }
     }
 }
